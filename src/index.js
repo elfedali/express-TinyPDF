@@ -48,7 +48,10 @@ server.use(express.json());
 // Serve the uploaded files via HTTP
 server.use("/uploads", express.static(UPLOADS_DIR));
 
-server.get("/", (req, res) => {
+server.set("view engine", "ejs");
+server.use(express.static(path.join(__dirname, "public")));
+
+server.get("/infos", (req, res) => {
   res.json({
     appName: process.env.APP_NAME || "PDF Compressor",
     status: "Server is running",
@@ -101,6 +104,9 @@ server.post("/pdf", upload.single("pdf"), async (req, res) => {
       .json({ message: "Internal Server Error", error: error.message });
   }
 });
+//
+
+server.use("/", require("./routes/index"));
 
 server.listen(PORT, () =>
   console.log(`Server is running on http://localhost:${PORT}`)
