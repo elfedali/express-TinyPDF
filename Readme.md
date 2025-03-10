@@ -17,4 +17,8 @@ This API allows users to **upload** a PDF file, compress it, and store the origi
 
 ## 📂 Folder Structure
 
-After uploading a PDF, the files are stored as follows:
+uploads/
+├── 123e4567-e89b-12d3-a456-426614174000/
+│ ├── original.pdf
+│ └── compressed/
+│ . .└── compressed.pdf
