@@ -3,6 +3,9 @@
 A simple **PDF compression API** built with **Node.js, Express, and Multer**.  
 This API allows users to **upload** a PDF file, compress it, and store the original & compressed files in an organized folder structure.
 
+- It uses `compress-pdf` for high-efficiency PDF compression and `multer` for file uploads.
+- It is based on `ghostscript` and it is a very efficient way to compress pdf files.
+
 ---
 
 ## 🚀 Features
@@ -15,10 +18,6 @@ This API allows users to **upload** a PDF file, compress it, and store the origi
 
 ---
 
-## 📂 Folder Structure
+![Alt text](screenshot.png?raw=true "Screenshot")
 
-uploads/
-├── 123e4567-e89b-12d3-a456-426614174000/
-│ ├── original.pdf
-│ └── compressed/
-│ . .└── compressed.pdf
+enjoy it! 🚀
