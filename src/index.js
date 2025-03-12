@@ -71,9 +71,7 @@ const compressPdf = async (inputFile, outputFolder) => {
       outputFolder,
       `compressed-${path.basename(inputFile)}`
     );
-    const buffer = await compress(inputFile, {
-      resolution: "screen",
-    });
+    const buffer = await compress(inputFile);
     await fs.promises.writeFile(outputFilePath, buffer);
     return outputFilePath;
   } catch (error) {
