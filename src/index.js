@@ -34,7 +34,11 @@ const storage = multer.diskStorage({
     cb(null, uuidFolder);
   },
   filename: (req, file, cb) => {
-    cb(null, sanitize(file.originalname));
+    // Sanitize the original filename
+    let sanitizedFilename = sanitize(file.originalname);
+    // Replace spaces with underscores
+    sanitizedFilename = sanitizedFilename.replace(/\s+/g, "_");
+    cb(null, sanitizedFilename);
   },
 });
 
@@ -49,7 +53,8 @@ server.use(express.json());
 server.use("/uploads", express.static(UPLOADS_DIR));
 
 server.set("view engine", "ejs");
-server.use(express.static(path.join(__dirname, "public")));
+server.set("views", path.join(__dirname, "..", "views"));
+server.use(express.static(path.join(__dirname, "..", "public")));
 
 server.get("/infos", (req, res) => {
   res.json({
@@ -66,7 +71,9 @@ const compressPdf = async (inputFile, outputFolder) => {
       outputFolder,
       `compressed-${path.basename(inputFile)}`
     );
-    const buffer = await compress(inputFile);
+    const buffer = await compress(inputFile, {
+      resolution: "screen",
+    });
     await fs.promises.writeFile(outputFilePath, buffer);
     return outputFilePath;
   } catch (error) {
@@ -94,8 +101,8 @@ server.post("/pdf", upload.single("pdf"), async (req, res) => {
     res.json({
       message: "Compressed PDF file successfully",
       folder: req.uploadDir,
-      original: originalFileUrl,
-      compressed: compressedFileUrl,
+      original: process.env.BASE_URL + ":" + PORT + originalFileUrl,
+      compressed: process.env.BASE_URL + ":" + PORT + compressedFileUrl,
     });
   } catch (error) {
     console.error("Error processing PDF:", error);
@@ -104,8 +111,8 @@ server.post("/pdf", upload.single("pdf"), async (req, res) => {
       .json({ message: "Internal Server Error", error: error.message });
   }
 });
-//
 
+// Use the routes defined in the routes/index.js file
 server.use("/", require("./routes/index"));
 
 server.listen(PORT, () =>
